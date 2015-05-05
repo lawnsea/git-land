@@ -21,8 +21,35 @@ load setup
   [ $status -eq 1 ]
 }
 
-# When all options are fully specified
+# All options fully specified
 # -----------------------------------------------------------------------------
+@test "'git land origin feature-branch:master' fetches latest target branch and updates the local copy" {
+  clone_repo "origin" "local-two"
+  enter_repo "local-two"
+  write_commit "third master commit" "master.txt"
+  run git push origin master
+
+  enter_repo "local"
+
+  run bash -c "yes | git land origin feature-branch:master"
+  [ $status -eq 0 ]
+
+  run git log --pretty=format:"%s"
+  [[ "${lines[0]}" =~ 'second feature commit' ]]
+  [[ "${lines[1]}" =~ 'first feature commit' ]]
+  [[ "${lines[2]}" =~ 'third master commit' ]]
+  [[ "${lines[3]}" =~ 'second master commit' ]]
+  [[ "${lines[4]}" =~ 'first master commit' ]]
+}
+
+@test "'git land origin feature-branch:master' aborts and exits with an error if updating the target branch fails" {
+  enter_repo "local"
+  git remote remove origin
+
+  run bash -c "yes | git land origin feature-branch:master"
+  [ $status -ne 0 ]
+}
+
 @test "'git land origin feature-branch:master' does an interactive rebase of feature-branch on master" {
   enter_repo "local"
 

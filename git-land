@@ -103,10 +103,10 @@ if [[ ! ($response = '' || $response =~ ^([yY][eE][sS]|[yY])$) ]]; then
 fi
 
 # sync local $target_branch with latest on github
-if ! (git checkout $target_branch && git fetch $remote && git reset --hard $remote/$target_branch); then
-  echo "Could not sync local $target_branch with main repo"
-  exit_and_cleanup $?
-fi
+(git checkout $target_branch && \
+  git fetch $remote && \
+  git reset --hard $remote/$target_branch) || \
+    exit_and_cleanup $? "Could not sync local $target_branch with main repo"
 
 # rebase and squash
 (git checkout $merge_branch && \
