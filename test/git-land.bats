@@ -42,9 +42,9 @@ load setup
 }
 
 @test "'git land origin feature-branch:master' aborts and exits with an error if the rebase fails" {
-  # this test fails because of #6
-  skip
   enter_repo "local"
+
+  git checkout feature-branch
   write_commit "conflicting feature commit" "master.txt"
 
   local_master_log_before=`git log master --pretty=format:"%s"`

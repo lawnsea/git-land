@@ -14,6 +14,9 @@ touch $lockfile
 
 function exit_and_cleanup() {
   rm -f $lockfile
+  if [[ $# == 2 ]]; then
+    printf "$2"
+  fi
   exit $1
 }
 
@@ -106,10 +109,9 @@ if ! (git checkout $target_branch && git fetch $remote && git reset --hard $remo
 fi
 
 # rebase and squash
-if ! (git checkout $merge_branch && git rebase -i $target_branch); then
-  echo "Could not checkout or rebase $merge_branch on $target_branch"
-  exit_and_cleanup $?
-fi
+(git checkout $merge_branch && \
+  git rebase -i $target_branch) || \
+    exit_and_cleanup $? "Could not checkout or rebase $merge_branch on $target_branch"
 
 # append github tag to close PR if we can and the last commit message omits it
 if [ -n "$pr" ]; then
