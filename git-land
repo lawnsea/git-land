@@ -126,10 +126,9 @@ fi
 
 # merge the PR and push
 head=$(git rev-parse HEAD)
-if ! (git checkout $target_branch && git merge --ff-only $head); then
-  echo "Could not fast-forward merge $merge_branch into $target_branch"
-  exit_and_cleanup $?
-fi
+(git checkout $target_branch && \
+  git merge --ff-only $head) || \
+    exit_and_cleanup $? "Could not fast-forward merge $merge_branch into $target_branch"
 
 git push $remote $target_branch
 exit_and_cleanup $?
