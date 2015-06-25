@@ -8,6 +8,9 @@ fixture_root="$project_root/scratch"
 setup() {
   cd $project_root
 
+  git config --global user.email "bats@example.com"
+  git config --global user.name "a user"
+
   # initialize origin
   init_repo "origin"
 
@@ -38,8 +41,6 @@ function init_repo() {
   mkdir -p $fixture_root/$repo
   cd $fixture_root/$repo
   git init --bare
-  git config user.email "bats@example.com"
-  git config user.name "a user"
 
   cd -
 }
