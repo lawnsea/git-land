@@ -38,6 +38,8 @@ function init_repo() {
   mkdir -p $fixture_root/$repo
   cd $fixture_root/$repo
   git init --bare
+  git config user.email "bats@example.com"
+  git config user.name "a user"
 
   cd -
 }
