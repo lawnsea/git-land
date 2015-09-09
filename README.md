@@ -44,6 +44,12 @@ request to the `remote` repository. [Pull request branches are
 read-only][read-only-pulls], so git-land exits with an error if invoked with a
 pull request number and this option specified.
 
+#### `-F, --no-force-push-topic`: do not force push rebased topic branch
+
+If this option is specified, `git-land` will not force push the rebased topic
+branch request to the `remote` repository, even if configured to do so by
+default.
+
 ## Installation
 
 ### NPM (recommended)
